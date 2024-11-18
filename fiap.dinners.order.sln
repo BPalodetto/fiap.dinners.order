@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BA24970E-6989-41BE-8FFF-202307EC6BE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "domain.unitTest", "tests\domain.unitTest\domain.unitTest.csproj", "{6D767C10-957C-4E8B-B40A-8FC7EF209D85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "tests\domain.unitTest\Test.csproj", "{6D767C10-957C-4E8B-B40A-8FC7EF209D85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UseCase", "src\UseCase\UseCase.csproj", "{9783892B-4BE2-4533-A1EA-19B1294B82E3}"
 EndProject

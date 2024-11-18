@@ -5,7 +5,7 @@ namespace Domain.Entities.OrderAggregate;
 
 public class OrderProduct
 {
-	public OrderProduct(Product product)
+    public OrderProduct(Product product)
 	{
 		Product = product;
 		ProductId = product.Id;

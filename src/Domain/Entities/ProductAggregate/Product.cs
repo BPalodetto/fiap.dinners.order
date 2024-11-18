@@ -9,7 +9,11 @@ namespace Domain.Entities.ProductAggregate;
 
 public class Product : IAggregateRoot
 {
-	public int Id { get; init; }
+    public Product()
+    {
+			
+    }
+    public int Id { get; init; }
 
 	private readonly string _name = string.Empty;
 	public required string Name
