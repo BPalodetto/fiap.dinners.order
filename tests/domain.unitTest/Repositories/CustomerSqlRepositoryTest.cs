@@ -43,7 +43,7 @@ namespace Repository.CustomerSqlTest
         }
 
         [Fact]
-        public async void DevePermitirObterClientePorId()
+        public async void DevePermitirObterClientePorCpf()
         {
             CustomerSqlModel customerSqlModel = new CustomerSqlModel()
             {
@@ -68,7 +68,7 @@ namespace Repository.CustomerSqlTest
         }
 
         [Fact]
-        public async void DevePermitirObterClientePorCpf()
+        public async void DevePermitirObterClientePorId()
         {
             CustomerSqlModel customerSqlModel = new CustomerSqlModel()
             {
@@ -90,6 +90,18 @@ namespace Repository.CustomerSqlTest
             _customerSqlRepository.Verify(p => p.GetAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
                                                         It.IsAny<bool>(),
                                                         default), Times.Exactly(1));
+        }
+
+        [Fact]
+        public async void DevePermitirContarCliente()
+        {
+            _customerSqlRepository.Setup(x => x.CountAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(), default)).ReturnsAsync(1);
+
+            var result = await _customerRepository.CountAsync(x => x.Cpf.Equals("333.824.233-67"), default);
+
+            Assert.True(result > 0);
+            Assert.Equal(1, result);
+            _customerSqlRepository.Verify(p => p.CountAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(), default), Times.Exactly(1));
         }
     }
 }
