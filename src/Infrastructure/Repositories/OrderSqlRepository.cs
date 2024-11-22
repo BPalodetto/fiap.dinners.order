@@ -10,9 +10,9 @@ namespace Infrastructure.Repositories;
 
 public class OrderSqlRepository : IOrderSqlRepository
 {
-	private readonly DinersSqlContext _context;
+	private readonly DinersOrderSqlContext _context;
 	public IUnitOfWork UnitOfWork => _context;
-	public OrderSqlRepository(DinersSqlContext dinersSqlContext)
+	public OrderSqlRepository(DinersOrderSqlContext dinersSqlContext)
 	{
 		_context = dinersSqlContext;
 	}

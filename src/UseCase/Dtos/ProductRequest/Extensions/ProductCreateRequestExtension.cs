@@ -11,7 +11,8 @@ public static class ProductCreateRequestExtension
 			Description = productCreateRequest.Description,
 			Name = productCreateRequest.Name,
 			ProductType = productCreateRequest.ProductType,
-			Price = productCreateRequest.Price
+			Price = productCreateRequest.Price,
+			Photo = productCreateRequest.Photo,
 		};
 		return product;
 	}

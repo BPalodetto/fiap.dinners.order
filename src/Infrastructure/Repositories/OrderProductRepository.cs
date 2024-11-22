@@ -7,8 +7,8 @@ namespace Infrastructure.Repositories;
 
 public class OrderProductRepository : IOrderProductRepository
 {
-	private readonly DinersSqlContext _context;
-	public OrderProductRepository(DinersSqlContext dinersSqlContext)
+	private readonly DinersOrderSqlContext _context;
+	public OrderProductRepository(DinersOrderSqlContext dinersSqlContext)
 	{
 		_context = dinersSqlContext;
 	}

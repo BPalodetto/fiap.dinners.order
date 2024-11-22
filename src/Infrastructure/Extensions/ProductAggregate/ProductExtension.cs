@@ -15,7 +15,7 @@ internal static class ProductExtension
 			Price = product.Price,
 			ProductType = product.ProductType,
 			PhotoContentType = product.Photo?.ContentType,
-			PhotoFilename = product.Photo?.ContentType,
+			PhotoFilename = product.Photo?.FileName,
 			PhotoData = product.Photo?.Data,
 		};
 

@@ -9,6 +9,6 @@ public record ProductCreateRequest
 	public string Description { get; init; } = string.Empty;
 	public decimal Price { get; init; }
 	public ProductType ProductType { get; init; }
-	public Photo? photo { get; init; }
+	public Photo? Photo { get; init; }
 
 }

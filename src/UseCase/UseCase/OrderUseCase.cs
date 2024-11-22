@@ -1,7 +1,9 @@
 using Core.Notifications;
+using Domain.Clients;
 using Domain.Entities.CustomerAggregate;
 using Domain.Entities.OrderAggregate;
 using Domain.Repositories;
+using Domain.ValueObjects;
 using UseCase.Dtos.OrderRequest;
 using UseCase.Services.Interfaces;
 
@@ -13,18 +15,21 @@ public class OrderUseCase : IOrderUseCase
     private readonly IOrderRepository _orderRepository;
     private readonly IProductRepository _productRepository;
     private readonly NotificationContext _notificationContext;
+    private readonly IPaymentClient _paymentClient;
 
     public OrderUseCase(
         IOrderRepository orderRepository,
         ICustomerRepository customerRepository,
         IProductRepository productRepository,
-        NotificationContext notificationContext
+        NotificationContext notificationContext,
+        IPaymentClient paymentClient
     )
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
         _productRepository = productRepository;
         _notificationContext = notificationContext;
+        _paymentClient = paymentClient;
     }
     public Task<Order?> GetAsync(int id, CancellationToken cancellationToken)
     {
@@ -130,6 +135,24 @@ public class OrderUseCase : IOrderUseCase
 
         order!.ChangeStatusToSentToProduction();
 
+        await _orderRepository.UpdateAsync(order, cancellationToken);
+    }
+
+    public async Task UpdateStatusToReceived(int orderId, PaymentMethod paymentMethod, CancellationToken cancellationToken)
+    {
+
+        var order = await _orderRepository.GetAsync(orderId, cancellationToken);
+
+        _notificationContext.AssertArgumentNotNull(order, $"Order with id:{orderId} not found");
+
+        if (_notificationContext.HasErrors)
+        {
+            return;
+        }
+
+        order!.ChangeStatusToReceived(paymentMethod);
+
+        await _paymentClient.SendAsync(order, cancellationToken);
         await _orderRepository.UpdateAsync(order, cancellationToken);
     }
 

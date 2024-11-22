@@ -11,9 +11,9 @@ namespace Infrastructure.Repositories;
 
 public class ProductSqlRepository : IProductSqlRepository
 {
-	private readonly DinersSqlContext _context;
+	private readonly DinersOrderSqlContext _context;
 	public IUnitOfWork UnitOfWork => _context;
-	public ProductSqlRepository(DinersSqlContext dinersSqlContext)
+	public ProductSqlRepository(DinersOrderSqlContext dinersSqlContext)
 	{
 		_context = dinersSqlContext;
 	}

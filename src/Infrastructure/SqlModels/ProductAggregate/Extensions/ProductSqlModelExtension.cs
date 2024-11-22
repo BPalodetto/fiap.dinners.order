@@ -10,7 +10,7 @@ internal static class ProductSqlModelExtension
 		Photo? photo = null;
 		if (productSqlModel.PhotoData != null)
 		{
-			photo = new Photo(productSqlModel.PhotoFilename, productSqlModel.PhotoContentType, productSqlModel.PhotoData);
+			photo = new Photo(productSqlModel.PhotoFilename!, productSqlModel.PhotoContentType!, productSqlModel.PhotoData);
 		}
 
 		return new()
