@@ -1,6 +1,7 @@
 using Core.Notifications;
 using Domain.Entities.Enums;
 using Domain.Entities.OrderAggregate;
+using Domain.Entities.ProductAggregate;
 using Domain.Repositories;
 using Moq;
 using UseCase.Dtos.OrderRequest;
@@ -18,7 +19,7 @@ namespace UseCase.OrderTest
         Mock<NotificationContext> _notificationContext;
 
         Order orderResponseMock;
-        
+        Product productResponseMock;
 
         public OrderUseCaseTest()
         {
@@ -34,13 +35,18 @@ namespace UseCase.OrderTest
                                             _notificationContext.Object
                                             );
 
-            List<OrderProduct> lstOrderProducts = new List<OrderProduct>();
-            OrderProduct order = null;
 
-            order.Quantity = 1;
-            lstOrderProducts.Add(order);
+            productResponseMock = new()
+            {
+                Description = "Hamburguer",
+                Name = "X-Bacon",
+                ProductType = ProductType.SideDish,
+                Price = 30,
+                Id = 1
+            };
 
-            orderResponseMock = new Order(1, OrderStatus.Creating, lstOrderProducts, null, DateTime.Now);
+            orderResponseMock = new Order(1, OrderStatus.Creating, [], null, DateTime.Now);
+            orderResponseMock.AddProduct(productResponseMock, 1);
         }
 
         [Fact]
@@ -64,6 +70,7 @@ namespace UseCase.OrderTest
             var result = await _orderUseCase.CreateAsync(createOrderRequest, default);
 
             Assert.NotNull(result);
+            Assert.NotEqual(0, result.Id);
         }
 
         [Fact]
