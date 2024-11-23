@@ -1,5 +1,6 @@
 using Domain.Entities.Enums;
 using Domain.Exceptions;
+using Domain.ValueObjects;
 using Helpers;
 
 namespace Domain.Entities.OrderAggregate.Exceptions;
@@ -20,7 +21,15 @@ internal class ChangeOrderStatusInvalidException : DomainException
 		}
 	}
 
-	public static void ThrowIfOrderStatusInvalidStepChange(OrderStatus ActualStatus, OrderStatus ExpectedStatus,
+    public static void ThrowIfOrderPaymentMethodIsNull(PaymentMethod? paymentMethod)
+    {
+        if (paymentMethod == null)
+        {
+            throw new ChangeOrderStatusInvalidException("Payment method is required to sent the order");
+        }
+    }
+
+    public static void ThrowIfOrderStatusInvalidStepChange(OrderStatus ActualStatus, OrderStatus ExpectedStatus,
 		OrderStatus NewStatus)
 	{
 		if (!ActualStatus.Equals(ExpectedStatus))

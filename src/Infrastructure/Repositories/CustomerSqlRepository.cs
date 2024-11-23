@@ -9,9 +9,9 @@ namespace Infrastructure.Repositories;
 
 public class CustomerSqlRepository : ICustomerSqlRepository
 {
-	private readonly DinersSqlContext _context;
+	private readonly DinersOrderSqlContext _context;
 	public IUnitOfWork UnitOfWork => _context;
-	public CustomerSqlRepository(DinersSqlContext dinersSqlContext)
+	public CustomerSqlRepository(DinersOrderSqlContext dinersSqlContext)
 	{
 		_context = dinersSqlContext;
 	}

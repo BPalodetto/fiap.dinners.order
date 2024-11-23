@@ -34,7 +34,7 @@ public class Order : IAggregateRoot
 	public PaymentMethod? PaymentMethod
 	{
 		get => _paymentMethod;
-		set
+		private set
 		{
 			SetPaymentMethodInvalidException.ThrowInvalidStatus(Status);
 			_paymentMethod = value;
@@ -108,13 +108,15 @@ public class Order : IAggregateRoot
 		return this;
 	}
 
-	public Order ChangeStatusToReceived()
+	public Order ChangeStatusToReceived(PaymentMethod paymentMethod)
 	{
 		ChangeOrderStatusInvalidException.ThrowIfOrderProductsIsEmpty(_orderProducts);
 		ChangeOrderStatusInvalidException.ThrowIfOrderStatusInvalidStepChange(
 			Status,
 			OrderStatus.Creating,
 			OrderStatus.Received);
+
+		PaymentMethod = paymentMethod;
 
 		Status = OrderStatus.Received;
 		return this;
@@ -126,10 +128,10 @@ public class Order : IAggregateRoot
         ChangeOrderStatusInvalidException.ThrowIfOrderProductsIsEmpty(_orderProducts);
         ChangeOrderStatusInvalidException.ThrowIfOrderStatusInvalidStepChange(
             Status,
-            OrderStatus.Creating,
+            OrderStatus.Received,
             OrderStatus.SentToProduction);
 
-        Status = OrderStatus.Received;
+        Status = OrderStatus.SentToProduction;
         return this;
     }
 }
