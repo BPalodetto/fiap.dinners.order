@@ -12,12 +12,12 @@ namespace Repository.OrderSqlTest
     {
         OrderSqlRepository _orderRepository;
 
-        Mock<DinersSqlContext> _context;
+        Mock<DinersOrderSqlContext> _context;
         Mock<IOrderSqlRepository> _orderProductSqlRepository;
 
         public OrderSqlRepositoryTest()
         {
-            _context = new Mock<DinersSqlContext>();
+            _context = new Mock<DinersOrderSqlContext>();
             _orderProductSqlRepository = new Mock<IOrderSqlRepository>();
 
             _orderRepository = new OrderSqlRepository(_context.Object);

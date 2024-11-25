@@ -5,6 +5,7 @@ using Domain.ValueObjects;
 using Moq;
 using UseCase.Dtos.CustomerRequest;
 using UseCase.Services;
+using Xunit.Sdk;
 
 namespace UseCase.CustomerTest
 {
@@ -24,30 +25,29 @@ namespace UseCase.CustomerTest
             _customerUseCase = new CustomerUseCase(_customerRepository.Object,
                                             _notificationContext.Object
                                             );
-
-
-            customerMockResponse = new Customer
-            {
-                Cpf = "333.824.233-67",
-                Name = "Alex",
-                Email = "alex@email.com",
-                Id = 938
-            };
+            
         }
 
         [Fact]
         public async void DevePermitirObterClientePorCpf()
         {
+            customerMockResponse = new Customer
+            {
+                Cpf = "483.617.217-97",
+                Name = "Alex",
+                Email = "alex@email.com",
+                Id = 938
+            };
 
-            _customerRepository.Setup(x => x.GetByCpf(It.IsAny<string>(), default)).ReturnsAsync(customerMockResponse);
+            _customerRepository.Setup(x => x.GetByCpf(It.IsAny<Cpf>(), default)).ReturnsAsync(customerMockResponse);         
 
-            var result = await _customerUseCase.GetByCpf("452.192.450-57", default);
+            var result = await _customerUseCase.GetByCpf("483.617.217-97", default);
 
             Assert.NotNull(result);
             Assert.Contains(result.Name, customerMockResponse.Name);
             Assert.Contains(result.Email, customerMockResponse.Email);
             Assert.Contains(result.Cpf, customerMockResponse.Cpf);
-            _customerRepository.Verify(p => p.GetByCpf(It.IsAny<string>(), default), Times.Exactly(1));
+            _customerRepository.Verify(p => p.GetByCpf(It.IsAny<Cpf>(), default), Times.Exactly(1));
         }
 
         [Fact]
@@ -55,9 +55,17 @@ namespace UseCase.CustomerTest
         {
             CreateCustomerRequest createCustomerRequest = new CreateCustomerRequest
             {
-                Cpf = "452.192.450-57",
+                Cpf = "483.617.217-97",
                 Name = "Alex",
                 Email = "alex@email.com",
+            };
+
+            customerMockResponse = new Customer
+            {
+                Cpf = "483.617.217-97",
+                Name = "Alex",
+                Email = "alex@email.com",
+                Id = 938
             };
 
             _customerRepository.Setup(x => x.ExistsByCpf(It.IsAny<Cpf>(), default)).ReturnsAsync(false);
@@ -69,7 +77,7 @@ namespace UseCase.CustomerTest
             Assert.Contains(result.Name, customerMockResponse.Name);
             Assert.Contains(result.Email, customerMockResponse.Email);
             Assert.Contains(result.Cpf, customerMockResponse.Cpf);
-            _customerRepository.Verify(p => p.GetByCpf(It.IsAny<string>(), default), Times.Exactly(2));
+            _customerRepository.Verify(p => p.ExistsByCpf(It.IsAny<Cpf>(), default), Times.Exactly(1));
         }
     }
 }

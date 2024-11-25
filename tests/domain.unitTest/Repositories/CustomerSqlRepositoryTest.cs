@@ -11,11 +11,11 @@ namespace Repository.CustomerSqlTest
     {
         CustomerSqlRepository _customerRepository;
 
-        Mock<DinersSqlContext> _context;
+        Mock<DinersOrderSqlContext> _context;
         Mock<ICustomerSqlRepository> _customerSqlRepository;
         public CustomerSqlRepositoryTest()
         {
-            _context = new Mock<DinersSqlContext>();
+            _context = new Mock<DinersOrderSqlContext>();
             _customerSqlRepository = new Mock<ICustomerSqlRepository>();
 
             _customerRepository = new CustomerSqlRepository(_context.Object);

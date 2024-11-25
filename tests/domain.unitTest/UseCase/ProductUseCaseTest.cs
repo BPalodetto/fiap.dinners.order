@@ -81,7 +81,7 @@ namespace UseCase.ProductTest
                 Name = "X-Bacon",
                 ProductType = ProductType.SideDish,
                 Price = 30,
-                photo = new Domain.ValueObjects.Photo("perfil.png", "image/jpeg", byteArray)
+                Photo = new Domain.ValueObjects.Photo("perfil.png", "image/jpeg", byteArray)
             };
 
             _productRepository.Setup(x => x.CreateAsync(It.IsAny<Product>(), default)).ReturnsAsync(productResponseMock);

@@ -27,7 +27,7 @@ namespace Adapters.CustomerRepositoryTest
         [Fact]
         public async void DevePermitirObterClientePorCpf()
         {
-            Customer customer = new Customer()
+            CustomerSqlModel customer = new CustomerSqlModel()
             {
                 Name = "Alex",
                 Email = "alex@email.com",
@@ -35,7 +35,9 @@ namespace Adapters.CustomerRepositoryTest
                 Id = 938
             };
 
-            _customerRepository.Setup(x => x.GetByCpf(It.IsAny<Cpf>(), default)).ReturnsAsync(customer);
+            _customerSqlRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
+                                                         It.IsAny<bool>(),
+                                                         default)).ReturnsAsync(customer);
 
             var result = await _customerRepositoryAdapter.GetByCpf("333.824.233-67", default);
 
@@ -44,13 +46,15 @@ namespace Adapters.CustomerRepositoryTest
             Assert.Contains(result.Email, customer.Email);
             Assert.Contains(result.Cpf, customer.Cpf);
             Assert.True(result.Id == customer.Id);
-            _customerRepository.Verify(p => p.GetByCpf(It.IsAny<Cpf>(), default), Times.Exactly(1));
+            _customerSqlRepository.Verify(p => p.GetAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
+                                                         It.IsAny<bool>(),
+                                                         default), Times.Exactly(1));
         }
 
         [Fact]
         public async void DevePermitirObterCliente()
         {
-            Customer customer = new Customer()
+            CustomerSqlModel customer = new CustomerSqlModel()
             {
                 Name = "Alex",
                 Email = "alex@email.com",
@@ -58,7 +62,9 @@ namespace Adapters.CustomerRepositoryTest
                 Id = 938
             };
 
-            _customerRepository.Setup(x => x.GetAsync(It.IsAny<int>(), default)).ReturnsAsync(customer);
+            _customerSqlRepository.Setup(x => x.GetAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
+                                                         It.IsAny<bool>(),
+                                                         default)).ReturnsAsync(customer);
 
             var result = await _customerRepositoryAdapter.GetAsync(938, default);
 
@@ -77,6 +83,14 @@ namespace Adapters.CustomerRepositoryTest
         [Fact]
         public async void DevePermitirCriarCliente()
         {
+            CustomerSqlModel customerSqlModel = new CustomerSqlModel()
+            {
+                Name = "Alex",
+                Email = "alex@email.com",
+                Cpf = "333.824.233-67",
+                Id = 938
+            };
+
             Customer customer = new Customer()
             {
                 Name = "Alex",
@@ -85,7 +99,8 @@ namespace Adapters.CustomerRepositoryTest
                 Id = 938
             };
 
-            _customerRepository.Setup(x => x.CreateAsync(It.IsAny<Customer>(), default)).ReturnsAsync(customer);
+            _customerSqlRepository.Setup(x => x.Add(It.IsAny<CustomerSqlModel>())).Returns(customerSqlModel);
+            _customerSqlRepository.Setup(x => x.UnitOfWork.CommitAsync(default)).ReturnsAsync(1);
 
             var result = await _customerRepositoryAdapter.CreateAsync(customer, default);
 
@@ -96,21 +111,22 @@ namespace Adapters.CustomerRepositoryTest
             Assert.Contains(result.Cpf, customer.Cpf);
             Assert.True(result.Id == customer.Id);
 
-            _customerSqlRepository.Verify(p => p.GetAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
-                                                        It.IsAny<bool>(),
-                                                        default), Times.Exactly(1));
+            _customerSqlRepository.Verify(p => p.Add(It.IsAny<CustomerSqlModel>()), Times.Exactly(1));
         }
 
         [Fact]
         public async void DevePermitirClienteValido()
         {
-            _customerRepository.Setup(x => x.ExistsByCpf(It.IsAny<Cpf>(), default)).ReturnsAsync(true);
+            _customerSqlRepository.Setup(x => x.CountAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
+                                                           default)
+                                                           ).ReturnsAsync(1);
 
             var result = await _customerRepositoryAdapter.ExistsByCpf("333.824.233-67", default);
 
             Assert.True(result);
 
-            _customerRepository.Verify(p => p.ExistsByCpf(It.IsAny<Cpf>(), default), Times.Exactly(1));
+            _customerSqlRepository.Verify(p => p.CountAsync(It.IsAny<Expression<Func<CustomerSqlModel, bool>>>(),
+                                                           default), Times.Exactly(1));
         }
     }
 }
