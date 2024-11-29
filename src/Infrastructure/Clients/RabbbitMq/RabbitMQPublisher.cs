@@ -19,7 +19,7 @@ public abstract class RabbitMQPublisher<T>
         using var connection = await _factory.CreateConnectionAsync(cancellationToken);
         using var channel = await connection.CreateChannelAsync();
 
-        await channel.QueueDeclareAsync(queue: _queue, durable: false, exclusive: false, autoDelete: false,
+        await channel.QueueDeclareAsync(queue: _queue, durable: true, exclusive: false, autoDelete: false,
             arguments: null);
 
         string jsonString = JsonSerializer.Serialize(message);

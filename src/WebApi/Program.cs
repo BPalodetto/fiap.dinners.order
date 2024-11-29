@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using WebApi.BackgroundServices;
 using WebApi.Extensions;
 using WebApi.Filters;
 using WebApi.Middlewares;
@@ -17,6 +18,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddUseCase();
 builder.Services.AddControllerLayerDI();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddHostedService<RabbitMqWorker>();
 
 var app = builder.Build();
 

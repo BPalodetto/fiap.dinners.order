@@ -1,6 +1,7 @@
 using Controller.Application.Interfaces;
 using Controller.Dtos.OrderResponse;
 using Controller.Extensions.OrderAggregate;
+using Domain.ValueObjects;
 using UseCase.Dtos.OrderRequest;
 using UseCase.Services.Interfaces;
 
@@ -53,14 +54,16 @@ public class OrderApplication : IOrderApplication
             order?.ToOrderUpdateProductResponse();
     }
 
-    public Task UpdateStatusToSentToProduction(int orderId, CancellationToken cancellationToken)
+    public async Task UpdateStatusToSentToProduction(int orderId, CancellationToken cancellationToken)
     {
-        return _orderUseCase.UpdateStatusToSentToProduction(orderId, cancellationToken);
+        await _orderUseCase.UpdateStatusToSentToProduction(orderId, cancellationToken);
     }
 
     public Task UpdateStatusToReceived(int orderId, UpdateOrderStatusToReceivedRequest updateOrderStatusToReceivedRequest, CancellationToken cancellationToken)
     {
-        return _orderUseCase.UpdateStatusToReceived(orderId, updateOrderStatusToReceivedRequest.PaymentMethod, cancellationToken);
+
+        PaymentMethod paymentMethod = new(updateOrderStatusToReceivedRequest.Provider, updateOrderStatusToReceivedRequest.Kind);
+        return _orderUseCase.UpdateStatusToReceived(orderId, paymentMethod, cancellationToken);
     }
 
 }

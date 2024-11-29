@@ -30,9 +30,18 @@ public class OrderRepositoryAdpater : IOrderRepository
 
 	public async Task<Order?> GetAsync(int id, CancellationToken cancellationToken)
 	{
-		var orderSql = await _orderSqlRepository.GetAsync(x => x.Id == id, true, cancellationToken);
-		return
-			orderSql?.ToOrder();
+		try
+		{
+            var orderSql = await _orderSqlRepository.GetAsync(x => x.Id == id, true, cancellationToken);
+            return
+                orderSql?.ToOrder();
+        }
+		catch (Exception ex)
+		{
+
+			throw;
+		}
+
 	}
 
 	public async Task<IEnumerable<Order>> ListAsync(OrderStatus orderStatus, int? page,

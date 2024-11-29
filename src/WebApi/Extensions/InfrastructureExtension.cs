@@ -51,7 +51,6 @@ internal static class InfrastructureExtension
 	{
 		return
 			services
-				.AddScoped<DinersOrderSqlContext>()
 				.AddDbContext<DinersOrderSqlContext>(opts =>
 					opts.UseSqlServer(ConnectionString));
 	}
@@ -60,7 +59,8 @@ internal static class InfrastructureExtension
     {
 		return
 			services
-				.AddSingleton<IPaymentClient, PaymentRabbitMqClient>();
+				.AddSingleton<IPaymentClient, PaymentRabbitMqClient>()
+				.AddSingleton<IProductionClient, ProductionRabbitMqClient>();
     }
 
     private static IServiceCollection AddRabbitMqConnectionFactory(this IServiceCollection services, IConfiguration configuration)

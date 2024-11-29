@@ -16,13 +16,15 @@ public class OrderUseCase : IOrderUseCase
     private readonly IProductRepository _productRepository;
     private readonly NotificationContext _notificationContext;
     private readonly IPaymentClient _paymentClient;
+    private readonly IProductionClient _productionClient;
 
     public OrderUseCase(
         IOrderRepository orderRepository,
         ICustomerRepository customerRepository,
         IProductRepository productRepository,
         NotificationContext notificationContext,
-        IPaymentClient paymentClient
+        IPaymentClient paymentClient,
+        IProductionClient productionClient
     )
     {
         _orderRepository = orderRepository;
@@ -30,6 +32,7 @@ public class OrderUseCase : IOrderUseCase
         _productRepository = productRepository;
         _notificationContext = notificationContext;
         _paymentClient = paymentClient;
+        _productionClient = productionClient;
     }
     public Task<Order?> GetAsync(int id, CancellationToken cancellationToken)
     {
@@ -135,7 +138,10 @@ public class OrderUseCase : IOrderUseCase
 
         order!.ChangeStatusToSentToProduction();
 
-        await _orderRepository.UpdateAsync(order, cancellationToken);
+        await Task.WhenAll(
+            _productionClient.SendAsync(order, cancellationToken),
+            _orderRepository.UpdateAsync(order, cancellationToken)
+        );
     }
 
     public async Task UpdateStatusToReceived(int orderId, PaymentMethod paymentMethod, CancellationToken cancellationToken)
