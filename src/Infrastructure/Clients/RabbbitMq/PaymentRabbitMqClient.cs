@@ -17,7 +17,7 @@ public class PaymentRabbitMqClient : RabbitMQPublisher<SendPaymentDto>, IPayment
     {
         var dto = new SendPaymentDto
         {
-            OrderId = order.Id,
+            ExternalId = order.Id,
             PaymentMethod = order.PaymentMethod!.Value,
             Price = order.Price
         };
