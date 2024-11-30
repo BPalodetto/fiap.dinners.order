@@ -5,7 +5,7 @@ using RabbitMQ.Client;
 
 namespace Infrastructure.Clients.RabbbitMq;
 
-public class PaymentRabbitMqClient :  RabbitMQPublisher<SendPaymentDto>, IPaymentClient
+public class PaymentRabbitMqClient : RabbitMQPublisher<SendPaymentDto>, IPaymentClient
 {
     public const string QueueName = "SendToPayment";
     public PaymentRabbitMqClient(IConnectionFactory factory) : base(factory, QueueName)
@@ -17,13 +17,11 @@ public class PaymentRabbitMqClient :  RabbitMQPublisher<SendPaymentDto>, IPaymen
     {
         var dto = new SendPaymentDto
         {
-            OrderId = order.Id,
+            ExternalId = order.Id,
             PaymentMethod = order.PaymentMethod!.Value,
             Price = order.Price
         };
 
         await PublishMessageAsync(dto, cancellationToken);
     }
-
-
 }
