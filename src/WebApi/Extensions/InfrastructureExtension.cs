@@ -65,17 +65,22 @@ internal static class InfrastructureExtension
 
     private static IServiceCollection AddRabbitMqConnectionFactory(this IServiceCollection services, IConfiguration configuration)
     {
+        var hostName = Environment.GetEnvironmentVariable("RabbitMqHostName");
+        var port = int.Parse(Environment.GetEnvironmentVariable("RabbitMqPort"));
+        var user = Environment.GetEnvironmentVariable("RabbitMqUserName");
+        var password = Environment.GetEnvironmentVariable("RabbitMqPassword");
+
         return
             services
                 .AddSingleton<IConnectionFactory>(
-					new ConnectionFactory() 
-					{ 
-						HostName = "localhost",
-						Port = 5672,
-                        UserName = "guest",
-                        Password = "guest"
+                    new ConnectionFactory()
+                    {
+                        HostName = hostName,
+                        Port = port,
+                        UserName = user,
+                        Password = password
                     }
-				);
+                );
     }
 
     public static void MigrationInitialisation(this IApplicationBuilder app)

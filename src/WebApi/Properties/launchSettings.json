@@ -17,7 +17,11 @@
       "applicationUrl": "http://localhost:5246",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DefaultConnection": "Server=localhost,1433;Database=dinersOrder;User=sa;Password=Password1*;TrustServerCertificate=True"
+        "DefaultConnection": "Server=localhost,1433;Database=dinersOrder;User=sa;Password=Password1*;TrustServerCertificate=True",
+        "RabbitMqHostName": "localhost",
+        "RabbitMqPort": 5672,
+        "RabbitMqUserName": "guest",
+        "RabbitMqPassword": "guest"
       }
     },
     "https": {
